@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ideeënbox – Brocoders Uitje 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F6FC; --ink:#1C2541; --muted:#56628A; --line:#D3DBEA; --surface:#FFFFFF;
+  --accent:#3A5BFF; --accent-ink:#FFFFFF;
+  --food:#FFD84D; --drink:#FF9EC0; --act:#78E3B4; --note-ink:#1C2541;
+  --shadow:#1C2541;
+  --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:ui-monospace, "Cascadia Code", Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131A2E; --ink:#EEF2FF; --muted:#A5B0D3; --line:#2A3558; --surface:#1B2340;
+    --accent:#8FA3FF; --accent-ink:#131A2E; --shadow:#05081A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131A2E; --ink:#EEF2FF; --muted:#A5B0D3; --line:#2A3558; --surface:#1B2340;
+  --accent:#8FA3FF; --accent-ink:#131A2E; --shadow:#05081A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; font-family:var(--body); color:var(--ink); background-color:var(--paper);
+  background-image:radial-gradient(var(--line) 1.2px, transparent 1.2px);
+  background-size:22px 22px; line-height:1.5; font-size:16px;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+
+/* Header */
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0}
+.logo{display:flex; align-items:center; gap:14px; text-decoration:none; color:var(--ink)}
+.logo svg{width:68px; height:68px; flex:none}
+.logo .word{display:flex; flex-direction:column; align-items:flex-start; line-height:1}
+.logo .name{font-family:var(--display); font-weight:800; font-size:clamp(1.6rem,4vw,2.1rem); letter-spacing:-.03em}
+.logo .name span{color:#2E9E62}
+.logo .tag{margin-top:6px; font-family:var(--display); font-weight:700; font-size:.95rem; background:var(--food); color:var(--note-ink); border:2px solid var(--ink); border-radius:8px; padding:2px 10px; transform:rotate(-3deg); box-shadow:2px 2px 0 var(--shadow)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .logo .name span{color:#5ED694}}
+:root[data-theme="dark"] .logo .name span{color:#5ED694}
+.count{font-family:var(--mono); font-size:.85rem; border:2px solid var(--ink); border-radius:999px; padding:3px 12px; background:var(--surface)}
+
+/* Hero */
+.hero{padding:22px 0 36px; max-width:760px}
+.hero h1{font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,4vw,2.8rem); line-height:.98; letter-spacing:-.02em; margin:0}
+.hero p{max-width:52ch; color:var(--muted); font-size:1.08rem; margin:16px 0 0}
+
+/* Buttons */
+.btn{font:700 1rem var(--body); border:2px solid var(--ink); border-radius:12px; padding:11px 18px; cursor:pointer; background:var(--surface); color:var(--ink); box-shadow:3px 3px 0 var(--shadow); transition:transform .08s, box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--shadow)}
+.btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--shadow)}
+.btn.primary{background:var(--accent); color:var(--accent-ink)}
+.btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
+
+/* Toolbar */
+.toolbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-bottom:26px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{font:600 .92rem var(--body); border:2px solid var(--ink); background:var(--surface); color:var(--ink); padding:6px 14px; border-radius:999px; cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.sort{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.92rem}
+select,input,textarea{font:inherit; color:var(--ink); background:var(--surface); border:2px solid var(--line); border-radius:10px; padding:9px 12px; width:100%}
+select:focus,input:focus,textarea:focus{border-color:var(--accent); outline:none}
+.sort select{width:auto; border-color:var(--ink)}
+
+/* Notes grid */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:30px 24px; padding-bottom:60px}
+.note{position:relative; color:var(--note-ink); background:var(--food); padding:26px 20px 18px; border-radius:4px 4px 18px 4px; box-shadow:0 10px 18px -12px rgba(0,0,0,.45); transform:rotate(var(--r,0deg)); display:flex; flex-direction:column; gap:10px}
+.note.drinken{background:var(--drink)} .note.activiteit{background:var(--act)}
+.note::before{content:""; position:absolute; top:-11px; left:50%; width:84px; height:22px; transform:translateX(-50%) rotate(-3deg); background:rgba(255,255,255,.55); border:1px solid rgba(0,0,0,.06)}
+.note .type{font-weight:700; font-size:.82rem; align-self:flex-start; background:rgba(255,255,255,.6); border-radius:999px; padding:2px 10px}
+.note h3{font-family:var(--display); font-weight:700; font-size:1.45rem; line-height:1.1; margin:0; overflow-wrap:anywhere}
+.note .desc{margin:0; white-space:pre-line; overflow-wrap:anywhere}
+.meta{list-style:none; margin:0; padding:0; display:grid; gap:3px; font-size:.93rem}
+.meta li{display:flex; gap:8px}
+.note a.more{font-weight:700; font-size:.93rem; overflow-wrap:anywhere}
+.by{font-size:.85rem; opacity:.8; margin-top:auto; padding-top:4px; display:flex; justify-content:space-between; align-items:center; gap:8px}
+
+.score{border-top:2px dashed rgba(28,37,65,.3); padding-top:12px; display:grid; gap:10px}
+.avg{display:flex; align-items:baseline; gap:10px}
+.avg strong{font-family:var(--display); font-size:2.2rem; line-height:1}
+.avg span{font-size:.88rem}
+.bar{height:8px; border-radius:99px; background:rgba(28,37,65,.15); overflow:hidden}
+.bar i{display:block; height:100%; background:var(--note-ink); border-radius:99px}
+.rate{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.rate .lbl{font-size:.85rem; margin-right:2px}
+.rate button{width:38px; height:38px; border-radius:50%; border:2px solid var(--note-ink); background:rgba(255,255,255,.55); font:700 1rem var(--body); color:var(--note-ink); cursor:pointer}
+.rate button:hover{background:#fff}
+.rate button[aria-pressed="true"]{background:var(--note-ink); color:#fff}
+.rate button:disabled{cursor:not-allowed; opacity:.5}
+.mine{font-size:.85rem; min-height:1.3em}
+
+.empty{grid-column:1/-1; text-align:center; padding:50px 20px; border:3px dashed var(--line); border-radius:18px; background:var(--surface)}
+.empty h2{font-family:var(--display); margin:0 0 6px}
+.empty p{color:var(--muted); margin:0 0 18px}
+.notice{background:var(--surface); border:2px solid var(--ink); border-radius:12px; padding:12px 16px; margin-bottom:20px}
+
+/* Dialog */
+dialog{border:3px solid var(--ink); border-radius:18px; padding:0; width:min(620px,calc(100% - 24px)); background:var(--surface); color:var(--ink); box-shadow:8px 8px 0 var(--accent)}
+dialog::backdrop{background:rgba(19,26,46,.55)}
+.dlg{padding:24px; max-height:85vh; overflow-y:auto}
+.dlg h2{font-family:var(--display); font-size:1.8rem; margin:0 0 4px}
+.dlg .sub{color:var(--muted); margin:0 0 18px}
+.fields{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.f{display:grid; gap:5px}
+.f.full{grid-column:1/-1}
+.f label,.f legend{font-weight:600; font-size:.93rem}
+.f small{color:var(--muted); font-size:.82rem}
+.types{display:flex; gap:8px; flex-wrap:wrap; border:none; padding:0; margin:0}
+.types legend{margin-bottom:6px}
+.types label{display:flex; align-items:center; gap:6px; border:2px solid var(--line); border-radius:999px; padding:6px 14px; cursor:pointer; font-weight:600}
+.types input{width:auto; accent-color:var(--accent)}
+.types label:has(input:checked){border-color:var(--ink); background:var(--paper)}
+.anon{display:flex; align-items:center; gap:8px; font-size:.93rem}
+.anon input{width:auto; accent-color:var(--accent)}
+.err{color:#D12B55; font-weight:600; font-size:.9rem; min-height:1.2em; margin:12px 0 0}
+.actions{display:flex; justify-content:flex-end; gap:10px; margin-top:14px}
+
+.toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%) translateY(20px); opacity:0; background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:12px; font-weight:600; transition:.25s; pointer-events:none; max-width:90vw; text-align:center}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+@media (max-width:760px){
+  .fields{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important; animation:none!important}
+  .note{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#" aria-label="Brocoders Uitje 2026">
+      <svg viewBox="0 0 68 68" aria-hidden="true">
+        <rect x="2" y="2" width="64" height="64" rx="18" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M15 20 q-5 0 -5 5 v4 q0 5 -4 5 q4 0 4 5 v4 q0 5 5 5" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M53 20 q5 0 5 5 v4 q0 5 4 5 q-4 0 -4 5 v4 q0 5 -5 5" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M29 38 L27 54 Q34 57 41 54 L39 38 Z" fill="#B8E6A0" stroke="#1C2541" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M34 40 v10" stroke="#1C2541" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="24" cy="31" r="8" fill="#2E9E62" stroke="#1C2541" stroke-width="2.5"/>
+        <circle cx="44" cy="31" r="8" fill="#2E9E62" stroke="#1C2541" stroke-width="2.5"/>
+        <circle cx="34" cy="23" r="10" fill="#3DBE7A" stroke="#1C2541" stroke-width="2.5"/>
+        <circle cx="34" cy="35" r="7" fill="#5ED694" stroke="#1C2541" stroke-width="2.5"/>
+        <circle cx="30" cy="20" r="1.8" fill="#1C2541"/><circle cx="38" cy="20" r="1.8" fill="#1C2541"/>
+        <path d="M30.5 25 q3.5 3 7 0" fill="none" stroke="#1C2541" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="word"><span class="name">Bro<span>coders</span></span><span class="tag">Uitje 2026</span></span>
+    </a>
+    <div class="count" id="count">0 ideeën</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Wat gaan we doen op het teamuitje?</h1>
+      <p>Schiet je idee in, bekijk wat de rest bedacht heeft en geef elk voorstel een score van 1 tot 5. Het idee met de hoogste gemiddelde score wint (meestal).</p>
+      <div style="margin-top:22px"><button class="btn primary" id="openForm" type="button">Idee inschieten</button></div>
+    </div>
+  </section>
+
+  <div id="notice"></div>
+
+  <div class="toolbar">
+    <div class="chips" role="group" aria-label="Filter op type">
+      <button class="chip" data-filter="all" aria-pressed="true" type="button">Alles</button>
+      <button class="chip" data-filter="eten" aria-pressed="false" type="button">🍕 Eten</button>
+      <button class="chip" data-filter="drinken" aria-pressed="false" type="button">🍻 Drinken</button>
+      <button class="chip" data-filter="activiteit" aria-pressed="false" type="button">🎯 Activiteit</button>
+    </div>
+    <label class="sort">Sorteer
+      <select id="sort">
+        <option value="top">Hoogst gewaardeerd</option>
+        <option value="new">Nieuwste eerst</option>
+        <option value="cheap">Goedkoopste eerst</option>
+        <option value="votes">Meeste stemmen</option>
+      </select>
+    </label>
+  </div>
+
+  <main class="grid" id="grid" aria-live="polite"></main>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form class="dlg" id="form" method="dialog" novalidate>
+    <h2 id="dlgTitle">Nieuw idee</h2>
+    <p class="sub">Velden met * zijn verplicht.</p>
+    <div class="fields">
+      <div class="f full">
+        <label for="fTitle">Titel *</label>
+        <input id="fTitle" maxlength="80" required placeholder="Bijv. Escape room + burgers">
+      </div>
+      <div class="f full">
+        <label for="fDesc">Beschrijving *</label>
+        <textarea id="fDesc" rows="4" maxlength="1200" required placeholder="Wat gaan we doen en waarom is het leuk?"></textarea>
+      </div>
+      <fieldset class="f full types">
+        <legend>Type *</legend>
+        <label><input type="radio" name="type" value="eten"> 🍕 Eten</label>
+        <label><input type="radio" name="type" value="drinken"> 🍻 Drinken</label>
+        <label><input type="radio" name="type" value="activiteit"> 🎯 Activiteit</label>
+      </fieldset>
+      <div class="f">
+        <label for="fDur">Geschatte duur *</label>
+        <input id="fDur" maxlength="40" required placeholder="Bijv. 3 uur, hele middag">
+      </div>
+      <div class="f">
+        <label for="fLoc">Locatie *</label>
+        <input id="fLoc" maxlength="80" required placeholder="Bijv. Leiden centrum">
+      </div>
+      <div class="f">
+        <label for="fCost">Geschatte kosten p.p. (€) *</label>
+        <input id="fCost" type="number" min="0" step="0.5" inputmode="decimal" required placeholder="35">
+      </div>
+      <div class="f">
+        <label for="fLink">Link voor meer info</label>
+        <input id="fLink" type="url" maxlength="400" placeholder="https://…">
+        <small>Optioneel</small>
+      </div>
+      <div class="f full">
+        <label for="fAuthor">Jouw naam</label>
+        <input id="fAuthor" maxlength="50" placeholder="Bijv. Erik">
+        <label class="anon"><input type="checkbox" id="fAnon"> Anoniem inschieten</label>
+      </div>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="actions">
+      <button class="btn" type="button" id="cancel">Annuleren</button>
+      <button class="btn primary" type="submit" id="save">Idee opslaan</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ==== Vul hier je eigen Supabase-gegevens in (Project Settings > API) ==== */
+const SUPABASE_URL = "https://wnmkdjwiemnowhauexwq.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndubWtkandpZW1ub3doYXVleHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2ODY1NTUsImV4cCI6MjEwNjI2MjU1NX0.VXTAQtWgR8w3omxqi5JuhRtC9EXE5s85eTAbTt1YqVY";
+/* ======================================================================== */
+
+const TYPES = {eten:"🍕 Eten", drinken:"🍻 Drinken", activiteit:"🎯 Activiteit"};
+const FACES = {1:"😖 niet leuk",2:"🙁 matig",3:"😐 prima",4:"🙂 leuk",5:"🤩 heel leuk"};
+const S = {ideas:[], raters:{}, mine:{}, filter:"all", sort:"top", sb:null, uid:null, canWrite:true, ready:false};
+const $ = id => document.getElementById(id);
+let writeChain = Promise.resolve();
+
+function toast(msg){const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),2600);}
+function el(tag, attrs={}, ...kids){
+  const n=document.createElement(tag);
+  for(const [k,v] of Object.entries(attrs)){
+    if(k==="class") n.className=v; else if(k==="text") n.textContent=v;
+    else if(k.startsWith("on")) n.addEventListener(k.slice(2),v); else n.setAttribute(k,v);
+  }
+  for(const k of kids) if(k!=null) n.append(k);
+  return n;
+}
+function hashRot(id){let h=0; for(const c of id) h=(h*31+c.charCodeAt(0))|0; return ((Math.abs(h)%31)/10-1.5).toFixed(2)+"deg";}
+function euro(n){return "€ "+Number(n).toLocaleString("nl-NL",{minimumFractionDigits:Number(n)%1?2:0, maximumFractionDigits:2});}
+function fmtDate(t){return new Date(t).toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});}
+function safeUrl(u){try{const x=new URL(u); return /^https?:$/.test(x.protocol)?x.href:null;}catch{return null;}}
+
+function stats(id){
+  let sum=0,n=0;
+  for(const scores of Object.values(S.raters)){const v=scores?.[id]; if(typeof v==="number"&&v>=1&&v<=5){sum+=v;n++;}}
+  return {avg:n?sum/n:0, n};
+}
+
+function render(){
+  const grid=$("grid"); grid.replaceChildren();
+  $("count").textContent = S.ideas.length===1 ? "1 idee" : S.ideas.length+" ideeën";
+  if(!S.ready){ grid.append(el("div",{class:"empty"},el("h2",{text:"Ideeën laden…"}))); return; }
+  let list=S.ideas.map(i=>({...i, ...stats(i.id)}));
+  if(S.filter!=="all") list=list.filter(i=>i.type===S.filter);
+  const by={
+    top:(a,b)=>(b.avg-a.avg)||(b.n-a.n)||(b.createdAt-a.createdAt),
+    new:(a,b)=>(b.createdAt||0)-(a.createdAt||0),
+    cheap:(a,b)=>(a.cost??0)-(b.cost??0),
+    votes:(a,b)=>(b.n-a.n)||(b.avg-a.avg)
+  }[S.sort];
+  list.sort(by);
+
+  if(!list.length){
+    const none = S.ideas.length===0;
+    grid.append(el("div",{class:"empty"},
+      el("h2",{text: none ? "Nog geen ideeën in de box" : "Geen ideeën van dit type"}),
+      el("p",{text: none ? "Wees de eerste en schiet een idee in." : "Kies een ander filter of voeg er zelf een toe."}),
+      S.canWrite ? el("button",{class:"btn primary",type:"button",text:"Idee inschieten",onclick:openForm}) : null));
+    return;
+  }
+
+  for(const i of list){
+    const my=S.mine[i.id];
+    const rateBtns=[1,2,3,4,5].map(v=>el("button",{
+      type:"button", title:FACES[v], "aria-label":`Geef score ${v}: ${FACES[v].slice(3)}`,
+      "aria-pressed":String(my===v), text:String(v),
+      onclick:()=>rate(i.id,v)
+    }));
+    if(!S.uid||!S.canWrite) rateBtns.forEach(b=>b.disabled=true);
+    const link=safeUrl(i.link||"");
+    const note=el("article",{class:"note "+(TYPES[i.type]?i.type:"eten"), style:`--r:${hashRot(i.id)}`},
+      el("span",{class:"type",text:TYPES[i.type]||i.type}),
+      el("h3",{text:i.title||"Zonder titel"}),
+      el("p",{class:"desc",text:i.description||""}),
+      el("ul",{class:"meta"},
+        el("li",{},el("span",{"aria-hidden":"true",text:"⏱"}),el("span",{text:"Duur: "+(i.duration||"?")})),
+        el("li",{},el("span",{"aria-hidden":"true",text:"📍"}),el("span",{text:"Locatie: "+(i.location||"?")})),
+        el("li",{},el("span",{"aria-hidden":"true",text:"💶"}),el("span",{text:"Kosten: "+(i.cost!=null?euro(i.cost)+" p.p.":"?")}))
+      ),
+      link ? el("a",{class:"more",href:link,target:"_blank",rel:"noopener noreferrer",text:"Meer informatie ↗"}) : null,
+      el("div",{class:"score"},
+        el("div",{class:"avg"},
+          el("strong",{text:i.n?i.avg.toFixed(1).replace(".",","):"–"}),
+          el("span",{text:i.n?`gemiddeld uit ${i.n} ${i.n===1?"stem":"stemmen"}`:"nog geen stemmen"})),
+        el("div",{class:"bar",role:"img","aria-label":`Gemiddelde ${i.avg.toFixed(1)} van 5`},el("i",{style:`width:${(i.avg/5)*100}%`})),
+        el("div",{class:"rate"},el("span",{class:"lbl",text:"Jouw score:"}),...rateBtns),
+        el("div",{class:"mine",text: my ? "Je gaf "+FACES[my] : ""})
+      ),
+      el("div",{class:"by"},
+        el("span",{text:"Ingeschoten door "+(i.author?i.author:"anoniem")+(i.createdAt?" op "+fmtDate(i.createdAt):"")}))
+    );
+    grid.append(note);
+  }
+}
+
+async function rate(id,v){
+  if(!S.sb||!S.uid){toast("Stemmen is nu niet mogelijk, herlaad de pagina."); return;}
+  const remove = S.mine[id]===v;
+  const next={...S.mine}; if(remove) delete next[id]; else next[id]=v;
+  S.mine=next; S.raters[S.uid]=next; render();
+  writeChain = writeChain.then(async()=>{
+    const q = remove
+      ? S.sb.from("ratings").delete().eq("idea_id",id).eq("voter_id",S.uid)
+      : S.sb.from("ratings").upsert({idea_id:id, voter_id:S.uid, score:v, updated_at:new Date().toISOString()},{onConflict:"idea_id,voter_id"});
+    const {error}=await q; if(error) throw error;
+  }).catch(()=>{ toast("Score opslaan mislukt, probeer het opnieuw."); loadRatings(); });
+}
+
+
+/* Form */
+function openForm(){
+  if(!S.sb||!S.uid){toast("Opslaan is nu niet mogelijk, herlaad de pagina."); return;}
+  if(!S.canWrite){toast("Je hebt alleen leesrechten."); return;}
+  $("form").reset(); $("err").textContent=""; $("fAuthor").disabled=false;
+  try{ const n=localStorage.getItem("ideeenbox-naam"); if(n) $("fAuthor").value=n; }catch{}
+  $("dlg").showModal(); $("fTitle").focus();
+}
+$("openForm").addEventListener("click",openForm);
+$("cancel").addEventListener("click",()=>$("dlg").close());
+$("fAnon").addEventListener("change",e=>{$("fAuthor").disabled=e.target.checked;});
+$("form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const type=document.querySelector('input[name="type"]:checked')?.value;
+  const d={
+    title:$("fTitle").value.trim(), description:$("fDesc").value.trim(),
+    duration:$("fDur").value.trim(), location:$("fLoc").value.trim(),
+    cost:$("fCost").value===""?null:Number($("fCost").value),
+    link:$("fLink").value.trim(), anon:$("fAnon").checked, author:$("fAuthor").value.trim()
+  };
+  const missing=[];
+  if(!d.title) missing.push("titel"); if(!d.description) missing.push("beschrijving");
+  if(!type) missing.push("type"); if(!d.duration) missing.push("duur"); if(!d.location) missing.push("locatie");
+  if(d.cost==null||isNaN(d.cost)||d.cost<0) missing.push("kosten");
+  if(missing.length){$("err").textContent="Vul nog in: "+missing.join(", ")+"."; return;}
+  if(d.link && !safeUrl(d.link)){$("err").textContent="De link moet beginnen met http:// of https://"; return;}
+  if(!d.anon && !d.author){$("err").textContent="Vul je naam in, of vink 'Anoniem inschieten' aan."; return;}
+  $("save").disabled=true;
+  try{
+    const {error}=await S.sb.from("ideas").insert({
+      title:d.title, description:d.description, duration:d.duration, location:d.location,
+      type, cost:Math.round(d.cost*100)/100, link:d.link||null,
+      author:d.anon?null:d.author, author_id:S.uid
+    });
+    if(error) throw error;
+    loadIdeas();
+    if(!d.anon){ try{localStorage.setItem("ideeenbox-naam",d.author);}catch{} }
+    $("dlg").close(); toast("Idee staat in de box 🎉");
+  }catch(err){
+    $("err").textContent = "Opslaan mislukt, probeer het opnieuw.";
+  }finally{ $("save").disabled=false; }
+});
+
+/* Filters */
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{
+  S.filter=c.dataset.filter;
+  document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",String(x===c)));
+  render();
+}));
+$("sort").addEventListener("change",e=>{S.sort=e.target.value; render();});
+
+/* Boot */
+function showNotice(t){ $("notice").replaceChildren(el("div",{class:"notice",text:t})); }
+async function loadIdeas(){
+  const {data,error}=await S.sb.from("ideas").select("*").order("created_at",{ascending:false});
+  if(error){ toast("Ideeën laden mislukt, herlaad de pagina."); return; }
+  S.ideas=data.map(r=>({id:r.id, title:r.title, description:r.description, type:r.type, duration:r.duration,
+    location:r.location, cost:r.cost==null?null:Number(r.cost), link:r.link, author:r.author,
+    authorId:r.author_id, createdAt:Date.parse(r.created_at)}));
+  S.ready=true; render();
+}
+async function loadRatings(){
+  const {data,error}=await S.sb.from("ratings").select("idea_id,voter_id,score");
+  if(error) return;
+  const r={}; for(const x of data){ (r[x.voter_id] ||= {})[x.idea_id]=x.score; }
+  S.raters=r; S.mine={...(r[S.uid]||{})}; render();
+}
+render();
+(async()=>{
+  if(!window.supabase){
+    S.ready=true; S.canWrite=false; $("openForm").disabled=true;
+    showNotice("De verbinding met de database kon niet laden. Herlaad de pagina.");
+    render(); return;
+  }
+  S.sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  let {data:{session}}=await S.sb.auth.getSession();
+  if(!session){
+    const {data,error}=await S.sb.auth.signInAnonymously();
+    if(error){ S.canWrite=false; $("openForm").disabled=true; showNotice("Je kunt de ideeën bekijken, maar inschieten en stemmen lukt nu niet. Staat 'anonymous sign-ins' aan in Supabase?"); }
+    else session=data.session;
+  }
+  S.uid=session?.user?.id||null;
+  await Promise.all([loadIdeas(),loadRatings()]);
+  S.sb.channel("ideeenbox")
+    .on("postgres_changes",{event:"*",schema:"public",table:"ideas"},()=>loadIdeas())
+    .on("postgres_changes",{event:"*",schema:"public",table:"ratings"},()=>loadRatings())
+    .subscribe();
+})();
+</script>
+</body>
+</html>
